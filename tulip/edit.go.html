@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main>
+    <div class="center-box sm:max-w-2xl">
+        <h1 class="box-title">Edit Profile</h1>
+        <form id="profile-edit" method="POST" action="/edit" class="space-y-4 md:space-y-6">
+            <input type="hidden" name="nonce" value="{{.Nonce}}"/>
+            <div>
+                <label for="field_name">Name:</label>
+                <input type="text" name="name" id="field_name" value="{{.User.Name}}"/>
+            </div>
+            <div>
+                <label for="field_picture">Picture:</label>
+                <input type="text" name="picture" id="field_picture" value="{{.User.Picture}}"/>
+            </div>
+            <div>
+                <label for="field_website">Website:</label>
+                <input type="text" name="website" id="field_website" value="{{.User.Website}}"/>
+            </div>
+            <div>
+                <label for="field_pronouns">Pronouns:</label>
+                <select name="pronouns" id="field_pronouns">
+                    <option value="they/them" {{if eq "they/them" .FieldPronoun}}selected{{end}}>They/Them</option>
+                    <option value="he/him" {{if eq "he/him" .FieldPronoun}}selected{{end}}>He/Him</option>
+                    <option value="she/her" {{if eq "she/her" .FieldPronoun}}selected{{end}}>She/Her</option>
+                    <option value="it/its" {{if eq "it/its" .FieldPronoun}}selected{{end}}>It/Its</option>
+                    <option value="one/one's" {{if eq "one/one's" .FieldPronoun}}selected{{end}}>One/One's</option>
+                </select>
+                <div class="flex flex-row justify-center mt-4">
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="flex">
+                            <div class="flex items-center h-5">
+                                <input id="field_reset_pronouns" name="reset_pronouns" type="checkbox"/>
+                                <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="field_reset_pronouns">Reset Pronoun</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="field_birthdate">Birthdate:</label>
+                <input type="date" name="birthdate" id="field_birthdate" value="{{.User.Birthdate}}"/>
+                <div class="flex flex-row justify-center mt-4">
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="flex">
+                            <div class="flex items-center h-5">
+                                <input id="field_reset_birthdate" name="reset_birthdate" type="checkbox"/>
+                                <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="field_reset_birthdate">Reset Birthdate</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="field_zoneinfo">Time Zone:</label>
+                <input type="text" name="zoneinfo" id="field_zoneinfo" value="{{.User.Zoneinfo}}" list="list_zoneinfo"/>
+                <datalist id="list_zoneinfo">
+                    {{range .ListZoneInfo}}
+                        <option value="{{.}}"></option>
+                    {{end}}
+                </datalist>
+                <div class="flex flex-row justify-center mt-4">
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="flex">
+                            <div class="flex items-center h-5">
+                                <input id="field_reset_zoneinfo" name="reset_zoneinfo" type="checkbox"/>
+                                <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="field_reset_zoneinfo">Reset Time Zone</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label for="field_locale">Language:</label>
+                <input type="text" name="locale" id="field_locale" value="{{.User.Locale}}" list="list_locale"/>
+                <datalist id="list_locale">
+                    {{range .ListLocale}}
+                        <option value="{{.Value}}">{{.Label}}</option>
+                    {{end}}
+                </datalist>
+                <div class="flex flex-row justify-center mt-4">
+                    <div class="space-y-4 md:space-y-6">
+                        <div class="flex">
+                            <div class="flex items-center h-5">
+                                <input id="field_reset_locale" name="reset_locale" type="checkbox"/>
+                                <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="field_reset_locale">Reset Language</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="grid grid-cols-2 gap-4">
+            <button type="submit" class="btn-green" form="profile-edit">Save</button>
+            <form method="GET" action="/manage/users">
+                <button type="submit" class="btn-red">Cancel</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

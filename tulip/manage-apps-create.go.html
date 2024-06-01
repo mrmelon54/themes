@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main>
+    <div class="center-box sm:max-w-2xl">
+        <h1 class="box-title">Create Client Application</h1>
+        <form id="manage-apps-create" method="POST" action="/manage/apps" class="space-y-4 md:space-y-6">
+            <input type="hidden" name="action" value="create"/>
+            <input type="hidden" name="offset" value="{{.Offset}}"/>
+            <div>
+                <label for="field_name">Name:</label>
+                <input type="text" name="name" id="field_name" required/>
+            </div>
+            <div>
+                <label for="field_domain">Domain:</label>
+                <input type="text" name="domain" id="field_domain" placeholder="https://example.com" required/>
+            </div>
+            <div class="flex flex-row justify-center">
+                <div class="space-y-4 md:space-y-6">
+                    <div class="flex">
+                        <div class="flex items-center h-5">
+                            <input id="field_public" name="public" type="checkbox"/>
+                            <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="field_public">Make this a client-only application</label>
+                        </div>
+                    </div>
+                    {{if .IsAdmin}}
+                        <div class="flex">
+                            <div class="flex items-center h-5">
+                                <input id="field_sso" name="sso" type="checkbox"/>
+                                <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                            </div>
+                            <div class="ml-3 text-sm">
+                                <label for="field_sso">Enable automatic SSO flow</label>
+                            </div>
+                        </div>
+                    {{end}}
+                    <div class="flex">
+                        <div class="flex items-center h-5">
+                            <input id="field_active" name="active" type="checkbox" checked/>
+                            <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                        </div>
+                        <div class="ml-3 text-sm">
+                            <label for="field_active">Enable the application</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+        <div class="grid grid-cols-2 gap-4">
+            <button type="submit" class="btn-green" form="manage-apps-create">Create</button>
+            <form method="GET" action="/manage/apps">
+                <button type="submit" class="btn-red">Cancel</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

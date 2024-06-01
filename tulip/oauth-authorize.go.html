@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main>
+    <div class="center-box sm:max-w-md">
+        <h1 class="box-title">{{.AppName}}</h1>
+        <h2 class="text-l font-bold leading-tight tracking-tight text-gray-900 md:text-xl dark:text-white text-center">Would like access to your 1f349 account:</h2>
+        <h3 class="text-l leading-tight tracking-tight text-gray-900 md:text-xl dark:text-white text-center">Logged in as: <span class="font-bold">{{.Auth.UserInfo.name}}</span></h3>
+        <div>
+            <ul class="space-y-1 text-gray-800 list-disc list-inside dark:text-gray-400">
+                {{range .WantsList}}
+                    <li>{{.}}</li>
+                {{end}}
+            </ul>
+        </div>
+        <form method="POST" action="/authorize" class="space-y-4 md:space-y-6">
+            <input type="hidden" name="response_type" value="{{.ResponseType}}"/>
+            <input type="hidden" name="response_mode" value="{{.ResponseMode}}">
+            <input type="hidden" name="client_id" value="{{.ClientID}}"/>
+            <input type="hidden" name="redirect_uri" value="{{.RedirectUri}}"/>
+            <input type="hidden" name="state" value="{{.State}}"/>
+            <input type="hidden" name="scope" value="{{.Scope}}"/>
+            <input type="hidden" name="nonce" value="{{.Nonce}}"/>
+            <div class="grid grid-cols-2 gap-4">
+                <button type="submit" name="oauth_action" value="authorize" class="btn-green">Authorize</button>
+                <button type="submit" name="oauth_action" value="cancel" class="btn-red">Cancel</button>
+            </div>
+        </form>
+        <div>Authorizing this action will redirect you to <a href="" class="font-bold">{{.AppDomain}}</a> with access to the permissions requested above.</div>
+    </div>
+</main>
+</body>
+</html>

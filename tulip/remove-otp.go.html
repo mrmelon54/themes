@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main>
+    <div class="center-box sm:max-w-2xl">
+        <h1 class="box-title">Remove OTP</h1>
+        <form id="remove-otp" method="POST" action="/edit/otp" class="space-y-4 md:space-y-6">
+            <input type="hidden" name="remove" value="1"/>
+            <div>
+                <label for="field_code">OTP Code:</label>
+                <input type="text" name="code" id="field_code" required autofocus pattern="[0-9]{6,8}" title="6/7/8 digit one time passcode" autocomplete="off" aria-autocomplete="none" role="presentation"/>
+            </div>
+        </form>
+        <div class="grid grid-cols-2 gap-4">
+            <button type="submit" class="btn-red" form="remove-otp">Remove OTP</button>
+            <form method="GET" action="/">
+                <button type="submit" class="btn-green">Cancel</button>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

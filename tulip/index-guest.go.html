@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main>
+    <div class="center-box sm:max-w-md">
+        <h1 class="box-title">{{.ServiceName}}</h1>
+        <form method="GET" action="/login" class="space-y-4 md:space-y-6">
+            <div>Not logged in</div>
+            <button type="submit" class="btn-green">Login</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>

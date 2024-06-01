@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+    <script>
+        window.addEventListener("load", function () {
+            selectText("app-secret");
+        });
+
+        // Thanks again: https://stackoverflow.com/a/987376
+        function selectText(nodeId) {
+            const node = document.getElementById(nodeId);
+
+            if (document.body.createTextRange) {
+                const range = document.body.createTextRange();
+                range.moveToElementText(node);
+                range.select();
+            } else if (window.getSelection) {
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(node);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            } else {
+                console.warn("Could not select text in node: Unsupported browser.");
+            }
+        }
+    </script>
+</head>
+<body>
+{{template "header.go.html" .}}
+<main class="space-y-4 sm:space-y-6">
+    {{if .NewAppSecret}}
+        <div class="block text-black text-center rounded-lg shadow bg-rose-400 border border-gray-700 mb-0 sm:max-w-2xl w-full p-6 sm:p-8">New application secret: <span id="app-secret">{{.NewAppSecret}}</span> for {{.NewAppName}}</div>
+    {{end}}
+
+    <h1 class="box-title">Manage Client Applications</h1>
+    <form method="GET" action="/manage/apps/create">
+        <button type="submit" class="btn-green">New Client Application</button>
+    </form>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        <table class="table-default">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Domain</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if eq (len .Apps) 0}}
+                <tr>
+                    <td colspan="9">No client applications found</td>
+                </tr>
+            {{end}}
+            {{range .Apps}}
+                <tr>
+                    <td>{{.Name}}</td>
+                    <td>{{.Domain}}</td>
+                    <td>
+                        <label class="flex items-center">
+                            <input type="checkbox" disabled {{if .Active}}checked{{end}}/>
+                            <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span class="hidden">Active</span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="grid grid-cols-1 gap-4">
+                            <form method="GET" action="/manage/apps">
+                                <input type="hidden" name="offset" value="{{$.Offset}}"/>
+                                <input type="hidden" name="edit" value="{{.Subject}}"/>
+                                <button type="submit" class="btn-green">Edit</button>
+                            </form>
+                            <form method="POST" action="/manage/apps?offset={{$.Offset}}">
+                                <input type="hidden" name="action" value="secret"/>
+                                <input type="hidden" name="offset" value="{{$.Offset}}"/>
+                                <input type="hidden" name="subject" value="{{.Subject}}"/>
+                                <button type="submit" class="btn-red">Reset Secret</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

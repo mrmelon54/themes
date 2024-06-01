@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{.ServiceName}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+{{template "header.go.html" .}}
+<main class="space-y-4 sm:space-y-6">
+    <h1 class="box-title">Manage Users</h1>
+    <form method="GET" action="/manage/users/create">
+        <button type="submit" class="btn-green">Create User</button>
+    </form>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
+        <table class="table-default">
+            <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Email</th>
+                <th>Email Verified</th>
+                <th>Last Updated</th>
+                <th>Active</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{if eq (len .Users) 0}}
+                <tr>
+                    <td colspan="9">No users found, this is definitely a bug.</td>
+                </tr>
+            {{end}}
+            {{range .Users}}
+                <tr>
+                    <td>{{.Subject}}</td>
+                    <td>
+                        {{if $.EmailShow}}
+                            <span>{{.Email}}</span>
+                        {{else}}
+                            <span>{{emailHide .Email}}</span>
+                        {{end}}
+                    </td>
+                    <td>{{.EmailVerified}}</td>
+                    <td>{{.UpdatedAt}}</td>
+                    <td>
+                        <label class="flex items-center">
+                            <input type="checkbox" disabled {{if .Active}}checked{{end}}/>
+                            <svg class="check" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                            <span class="hidden">Active</span>
+                        </label>
+                    </td>
+                    <td>
+                        <div class="grid grid-cols-1 gap-4">
+                            <form method="GET" action="/manage/users">
+                                <input type="hidden" name="offset" value="{{$.Offset}}"/>
+                                <input type="hidden" name="edit" value="{{.Subject}}"/>
+                                <button type="submit" class="btn-green">Edit</button>
+                            </form>
+                            <form method="POST" action="/reset-password">
+                                <input type="hidden" name="email" value="{{.Email}}"/>
+                                <button type="submit" class="btn-red">Send Reset Password Email</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {{end}}
+            </tbody>
+        </table>
+    </div>
+
+    <form method="GET" action="/manage/users">
+        <input type="hidden" name="offset" value="{{.Offset}}"/>
+        {{if not .EmailShow}}
+            <input type="hidden" name="show-email"/>
+        {{end}}
+        <button type="submit" class="btn-amber">{{if .EmailShow}}Hide Email Addresses{{else}}Show email addresses{{end}}</button>
+    </form>
+</main>
+</body>
+</html>
