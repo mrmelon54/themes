@@ -1,0 +1,28 @@
+on: [push, pull_request]
+
+name: Build
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/setup-go@v5
+      with:
+        go-version: stable
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+    - uses: actions/checkout@v4
+    - run: yarn
+    - run: yarn global add tailwindcss
+    - run: yarn build
+    - run: tar -czvf tulip.tar.gz tulip/
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      if: startsWith(github.ref, 'refs/tags/v')
+      with:
+        files: |
+          tulip.tar.gz
