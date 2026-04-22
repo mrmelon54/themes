@@ -9,6 +9,6 @@
     "dev": "go run . -watch"
   },
   "devDependencies": {
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.19"
   }
 }
